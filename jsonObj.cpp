@@ -26,14 +26,19 @@ jsonObjFunc & jsonObj::LastData(void)
 	return m_json;
 }
 
-bool jsonObj::PushArrObj()
+bool jsonObj::LockCurObj()
 {
-	return m_json.PushArrObj();
+	return m_json.LockCurObj();
 }
 
-void jsonObj::PopArrObj()
+void jsonObj::UnlockObj()
 {
-	return m_json.PopArrObj();
+	return m_json.UnlockObj();
+}
+
+void jsonObj::ClearLocks()
+{
+	return m_json.ClearLocks();
 }
 
 jsonObj::~jsonObj(void)

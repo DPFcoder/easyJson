@@ -27,12 +27,14 @@ int main(int argc, char* argv[])
 		return -1;
 	}
 	cout << "test1:" << endl;
-	if (test["employees"].PushArrObj()) {
+	if (test["employees"].LockCurObj()) {
 		for (int i = 0; test[i]; ++i) {
-			cout << (const char*)test[i]["firstName"] << endl;
-			cout << (const char*)test[i]["lastName"] << endl;
+			test.LockCurObj();
+			cout << (const char*)test["firstName"] << endl;
+			cout << (const char*)test["lastName"] << endl;
+			test.UnlockObj();
 		}
-		test.PopArrObj();
+		test.UnlockObj();
 	}
 	cout << endl <<  "test2:" << endl;
 	cout << (const char*)test["employees"][0]["firstName"] << endl;

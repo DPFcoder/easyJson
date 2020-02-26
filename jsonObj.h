@@ -11,8 +11,9 @@ public:
 	jsonObjFunc& operator [](const char* key);
 	jsonObjFunc& operator [](int pos);
 	jsonObjFunc& LastData(void);
-	bool PushArrObj();
-	void PopArrObj();
+	bool LockCurObj();
+	void UnlockObj();
+	void ClearLocks();
 private:
 	jsonObjFunc m_json;
 };

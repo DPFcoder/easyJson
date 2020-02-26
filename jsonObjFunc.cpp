@@ -30,13 +30,14 @@ void jsonObjFunc::FreeMembers(void)
 {
 	if (m_root)
 		cJSON_free(m_root);
-	while (!m_arrs.empty())m_arrs.pop();
+	ClearStack();
 	InitMembers();
 }
 
 void jsonObjFunc::ResetPos(void)
 {
-	m_pos = m_root;
+	if(m_objs.empty()) m_pos = m_root;
+	else m_pos = m_objs.top();
 }
 
 void jsonObjFunc::SetCdata(void)
@@ -54,6 +55,11 @@ void jsonObjFunc::SetCdata(void)
 			InitCdata();
 		}
 	}
+}
+
+void jsonObjFunc::ClearStack(void)
+{
+	while (!m_objs.empty())m_objs.pop();
 }
 
 jsonObjFunc::~jsonObjFunc(void)
@@ -81,7 +87,6 @@ jsonObjFunc& jsonObjFunc::operator[](const char * key)
 
 jsonObjFunc& jsonObjFunc::operator[](int pos)
 {
-	if (!m_arrs.empty())m_pos = m_arrs.top();
 	if (m_pos == NULL || m_pos->type != cJSON_Array || cJSON_GetArraySize(m_pos) <= pos){
 		InitEdata();
 	} else {
@@ -96,18 +101,23 @@ jsonObjFunc& jsonObjFunc::operator[](int pos)
 	return *this;
 }
 
-bool jsonObjFunc::PushArrObj()
+bool jsonObjFunc::LockCurObj()
 {
-	if (m_pos != NULL && m_pos->type == cJSON_Array) {
-		m_arrs.push(m_pos);
+	if (m_pos != NULL) {
+		m_objs.push(m_pos);
 		return true;
 	}
 	return false;
 }
 
-void jsonObjFunc::PopArrObj()
+void jsonObjFunc::UnlockObj()
 {
-	if (!m_arrs.empty()){
-		m_arrs.pop();
+	if (!m_objs.empty()){
+		m_objs.pop();
 	}
+}
+
+void jsonObjFunc::ClearLocks()
+{
+	ClearStack();
 }

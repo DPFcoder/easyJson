@@ -23,7 +23,7 @@ private:
 	void FreeMembers(void);
 	void ResetPos(void);
 	void SetCdata(void);
-
+	void ClearStack(void);
 public:
 	bool CjsonParse(const char* jsonstr);
 	jsonObjFunc& operator [](const char* key);
@@ -31,8 +31,9 @@ public:
 	operator const char*() { return c_str; }
 	operator int() { return (int)c_int; }
 	operator bool() { return c_type != CJSONERR; }
-	bool PushArrObj();
-	void PopArrObj();
+	bool LockCurObj();
+	void UnlockObj();
+	void ClearLocks();
 	
 public:
 	int c_int;
@@ -41,6 +42,6 @@ public:
 private:
 	cJSON* m_root;
 	cJSON* m_pos;
-	std::stack<cJSON*> m_arrs;
+	std::stack<cJSON*> m_objs;
 };
 
