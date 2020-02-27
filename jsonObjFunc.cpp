@@ -29,7 +29,7 @@ void jsonObjFunc::InitMembers(void)
 void jsonObjFunc::FreeMembers(void)
 {
 	if (m_root)
-		cJSON_free(m_root);
+		cJSON_Delete(m_root);
 	ClearStack();
 	InitMembers();
 }
